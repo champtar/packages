@@ -8,6 +8,7 @@ SDK_HOME="$HOME/sdk"
 SDK_PATH=https://downloads.lede-project.org/snapshots/targets/ar71xx/generic/
 SDK=lede-sdk-ar71xx-generic_gcc-5.4.0_musl.Linux-x86_64
 PACKAGES_DIR="$PWD"
+CPU_MAX=$(($(nproc) + 1))
 
 echo_red()   { printf "\033[1;31m$*\033[m\n"; }
 echo_green() { printf "\033[1;32m$*\033[m\n"; }
@@ -118,7 +119,7 @@ EOF
 
 		# we can't enable verbose built else we often hit Travis limits
 		# on log size and the job get killed
-		exec_status '^ERROR' make "package/$pkg_name/compile" -j3 || RET=1
+		exec_status '^ERROR' make "package/$pkg_name/compile" -j$CPU_MAX || RET=1
 
 		echo_blue "=== $pkg_name: compile test done"
 
